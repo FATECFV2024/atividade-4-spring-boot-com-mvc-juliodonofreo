@@ -13,7 +13,8 @@ public class AlunoDTO {
     private int idade;
     private boolean matricula;
 
-    List<NotaMinDTO> notas = new ArrayList<>();
+    private List<NotaMinDTO> notas = new ArrayList<>();
+    private List<EnderecoMinDTO> enderecos = new ArrayList<>();
 
     public AlunoDTO(Long id, String nome, String curso, int idade, boolean matricula) {
         this.id = id;
@@ -30,8 +31,12 @@ public class AlunoDTO {
         this.idade = entity.getIdade();
         this.matricula = entity.isMatricula();
 
-        entity.getNotas().stream().forEach(
-                NotaMinDTO::new
+        entity.getNotas().stream().forEach((x) ->
+                notas.add(new NotaMinDTO(x)
+        ));
+
+        entity.getEnderecos().stream().forEach((x)->
+                enderecos.add(new EnderecoMinDTO(x))
         );
     }
 
@@ -57,5 +62,9 @@ public class AlunoDTO {
 
     public List<NotaMinDTO> getNotas() {
         return notas;
+    }
+
+    public List<EnderecoMinDTO> getEnderecos() {
+        return enderecos;
     }
 }

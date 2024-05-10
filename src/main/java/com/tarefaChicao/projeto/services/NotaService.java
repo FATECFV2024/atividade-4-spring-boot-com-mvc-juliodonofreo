@@ -1,7 +1,7 @@
 package com.tarefaChicao.projeto.services;
 
-import com.tarefaChicao.projeto.daos.AlunoRepository;
-import com.tarefaChicao.projeto.daos.NotaRepository;
+import com.tarefaChicao.projeto.repositories.AlunoRepository;
+import com.tarefaChicao.projeto.repositories.NotaRepository;
 import com.tarefaChicao.projeto.dtos.NotaDTO;
 import com.tarefaChicao.projeto.entities.Aluno;
 import com.tarefaChicao.projeto.entities.Nota;
@@ -33,11 +33,7 @@ public class NotaService {
 
     public NotaDTO insert(NotaDTO dto) {
         Nota entity = new Nota();
-        Aluno aluno = alunoRepository.findById(dto.getAluno().getId()).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
-
-        entity.setNota(dto.getNota());
-        entity.setNome_disciplina(dto.getNome_disciplina());
-        entity.setAluno(aluno);
+        copyDtoToEntity(entity, dto);
 
         entity = repository.save(entity);
         return new NotaDTO(entity);
@@ -45,11 +41,7 @@ public class NotaService {
 
     public NotaDTO update(Long id, NotaDTO dto) {
         Nota entity = repository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.NOTA_NAO_ENCONTRADA));
-        Aluno aluno = alunoRepository.findById(dto.getAluno().getId()).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
-
-        entity.setNota(dto.getNota());
-        entity.setNome_disciplina(dto.getNome_disciplina());
-        entity.setAluno(aluno);
+        copyDtoToEntity(entity, dto);
 
         entity = repository.save(entity);
         return new NotaDTO(entity);
@@ -57,5 +49,13 @@ public class NotaService {
 
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    private void copyDtoToEntity(Nota entity, NotaDTO dto){
+        entity.setNota(dto.getNota());
+        entity.setNome_disciplina(dto.getNome_disciplina());
+
+        Aluno aluno = alunoRepository.findById(dto.getAluno().getId()).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
+        entity.setAluno(aluno);
     }
 }

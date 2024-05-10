@@ -2,9 +2,7 @@ package com.tarefaChicao.projeto.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_aluno")
@@ -20,6 +18,15 @@ public class Aluno {
 
     @OneToMany(mappedBy = "aluno")
     private List<Nota> notas = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "tb_aluno_endereco",
+            joinColumns = @JoinColumn (name = "id_aluno"),
+            inverseJoinColumns = @JoinColumn(name = "id_endereco")
+
+    )
+    private Set<Endereco> enderecos = new HashSet<>();
 
     public Aluno(){
 
@@ -75,6 +82,10 @@ public class Aluno {
 
     public List<Nota> getNotas() {
         return notas;
+    }
+
+    public Set<Endereco> getEnderecos() {
+        return enderecos;
     }
 
     @Override

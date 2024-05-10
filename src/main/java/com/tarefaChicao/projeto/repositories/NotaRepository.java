@@ -1,4 +1,4 @@
-package com.tarefaChicao.projeto.daos;
+package com.tarefaChicao.projeto.repositories;
 
 import com.tarefaChicao.projeto.entities.Nota;
 import org.springframework.data.repository.CrudRepository;
