@@ -3,6 +3,8 @@ package com.tarefaChicao.projeto.services;
 import com.tarefaChicao.projeto.daos.AlunoRepository;
 import com.tarefaChicao.projeto.dtos.AlunoDTO;
 import com.tarefaChicao.projeto.entities.Aluno;
+import com.tarefaChicao.projeto.services.exceptions.NotFoundException;
+import com.tarefaChicao.projeto.services.utils.ErrorMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,7 @@ public class AlunoService{
     }
 
     public AlunoDTO findByID(Long id){
-        Aluno entity = repository.findById(id).get();
+        Aluno entity = repository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
         return new AlunoDTO(entity);
     }
 
@@ -38,7 +40,7 @@ public class AlunoService{
     }
 
     public AlunoDTO update(Long id, AlunoDTO dto) {
-        Aluno entity = repository.findById(id).get();
+        Aluno entity = repository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
 
         entity.setNome(dto.getNome());
         entity.setCurso(dto.getCurso());

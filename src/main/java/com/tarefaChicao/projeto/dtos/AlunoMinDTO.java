@@ -2,10 +2,7 @@ package com.tarefaChicao.projeto.dtos;
 
 import com.tarefaChicao.projeto.entities.Aluno;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class AlunoDTO {
+public class AlunoMinDTO {
 
     private Long id;
     private String nome;
@@ -13,9 +10,7 @@ public class AlunoDTO {
     private int idade;
     private boolean matricula;
 
-    List<NotaMinDTO> notas = new ArrayList<>();
-
-    public AlunoDTO(Long id, String nome, String curso, int idade, boolean matricula) {
+    public AlunoMinDTO(Long id, String nome, String curso, int idade, boolean matricula) {
         this.id = id;
         this.nome = nome;
         this.curso = curso;
@@ -23,16 +18,12 @@ public class AlunoDTO {
         this.matricula = matricula;
     }
 
-    public AlunoDTO(Aluno entity){
+    public AlunoMinDTO(Aluno entity){
         this.id = entity.getId();
         this.nome = entity.getNome();
         this.curso = entity.getCurso();
         this.idade = entity.getIdade();
         this.matricula = entity.isMatricula();
-
-        entity.getNotas().stream().forEach(
-                NotaMinDTO::new
-        );
     }
 
     public Long getId() {
@@ -53,9 +44,5 @@ public class AlunoDTO {
 
     public boolean isMatricula() {
         return matricula;
-    }
-
-    public List<NotaMinDTO> getNotas() {
-        return notas;
     }
 }

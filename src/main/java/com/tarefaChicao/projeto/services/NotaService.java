@@ -1,8 +1,12 @@
 package com.tarefaChicao.projeto.services;
 
+import com.tarefaChicao.projeto.daos.AlunoRepository;
 import com.tarefaChicao.projeto.daos.NotaRepository;
-import com.tarefaChicao.projeto.dtos.NotaMinDTO;
+import com.tarefaChicao.projeto.dtos.NotaDTO;
+import com.tarefaChicao.projeto.entities.Aluno;
 import com.tarefaChicao.projeto.entities.Nota;
+import com.tarefaChicao.projeto.services.exceptions.NotFoundException;
+import com.tarefaChicao.projeto.services.utils.ErrorMessages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,34 +18,41 @@ public class NotaService {
     @Autowired
      private NotaRepository repository;
 
-    public List<NotaMinDTO> findAll(){
+    @Autowired
+    private AlunoRepository alunoRepository;
+
+    public List<NotaDTO> findAll(){
         List<Nota> list = (List<Nota>) repository.findAll();
-        return list.stream().map(NotaMinDTO::new).toList();
+        return list.stream().map(x -> new NotaDTO(x)).toList();
     }
 
-    public NotaMinDTO findByID(Long id){
-        Nota entity = repository.findById(id).get();
-        return new NotaMinDTO(entity);
+    public NotaDTO findByID(Long id){
+        Nota entity = repository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.NOTA_NAO_ENCONTRADA));
+        return new NotaDTO(entity);
     }
 
-    public NotaMinDTO insert(NotaMinDTO dto) {
+    public NotaDTO insert(NotaDTO dto) {
         Nota entity = new Nota();
+        Aluno aluno = alunoRepository.findById(dto.getAluno().getId()).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
 
         entity.setNota(dto.getNota());
         entity.setNome_disciplina(dto.getNome_disciplina());
+        entity.setAluno(aluno);
 
         entity = repository.save(entity);
-        return new NotaMinDTO(entity);
+        return new NotaDTO(entity);
     }
 
-    public NotaMinDTO update(Long id, NotaMinDTO dto) {
-        Nota entity = repository.findById(id).get();
+    public NotaDTO update(Long id, NotaDTO dto) {
+        Nota entity = repository.findById(id).orElseThrow(() -> new NotFoundException(ErrorMessages.NOTA_NAO_ENCONTRADA));
+        Aluno aluno = alunoRepository.findById(dto.getAluno().getId()).orElseThrow(() -> new NotFoundException(ErrorMessages.ALUNO_NAO_ENCONTRADO));
 
         entity.setNota(dto.getNota());
         entity.setNome_disciplina(dto.getNome_disciplina());
+        entity.setAluno(aluno);
 
         entity = repository.save(entity);
-        return new NotaMinDTO(entity);
+        return new NotaDTO(entity);
     }
 
     public void deleteById(Long id) {

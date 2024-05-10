@@ -1,6 +1,7 @@
 package com.tarefaChicao.projeto.controllers;
 
-import com.tarefaChicao.projeto.dtos.NotaMinDTO;
+import com.tarefaChicao.projeto.dtos.NotaDTO;
+import com.tarefaChicao.projeto.entities.Nota;
 
 import com.tarefaChicao.projeto.services.NotaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +20,17 @@ public class NotaController {
     private NotaService service;
 
     @GetMapping
-    public ResponseEntity<List<NotaMinDTO>> findAll() {
+    public ResponseEntity<List<NotaDTO>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NotaMinDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<NotaDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findByID(id));
     }
 
     @PostMapping
-    public ResponseEntity<NotaMinDTO> insert(@RequestBody NotaMinDTO dto){
+    public ResponseEntity<NotaDTO> insert(@RequestBody NotaDTO dto){
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequestUri().path("/{id}")
@@ -38,7 +39,7 @@ public class NotaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NotaMinDTO> update(@PathVariable Long id, @RequestBody NotaMinDTO dto){
+    public ResponseEntity<NotaDTO> update(@PathVariable Long id, @RequestBody NotaDTO dto){
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }

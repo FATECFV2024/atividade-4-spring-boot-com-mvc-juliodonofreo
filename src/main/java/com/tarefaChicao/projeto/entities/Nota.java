@@ -15,6 +15,10 @@ public class Nota {
     private String nome_disciplina;
     private Double nota;
 
+    @ManyToOne
+    @JoinColumn(name = "id_aluno")
+    private Aluno aluno;
+
     public Nota(){
 
     }
@@ -47,6 +51,14 @@ public class Nota {
 
     public void setNota(Double nota) {
         this.nota = nota;
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
     }
 
     @Override

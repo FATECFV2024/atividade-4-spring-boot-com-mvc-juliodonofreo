@@ -2,6 +2,8 @@ package com.tarefaChicao.projeto.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +17,9 @@ public class Aluno {
     private String curso;
     private int idade;
     private boolean matricula;
+
+    @OneToMany(mappedBy = "aluno")
+    private List<Nota> notas = new ArrayList<>();
 
     public Aluno(){
 
@@ -66,6 +71,10 @@ public class Aluno {
 
     public void setMatricula(boolean matricula) {
         this.matricula = matricula;
+    }
+
+    public List<Nota> getNotas() {
+        return notas;
     }
 
     @Override
